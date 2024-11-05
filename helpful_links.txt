@@ -1,0 +1,7 @@
+real csv file link : https://archive.ics.uci.edu/ml/datasets/chronic_kidney_disease
+
+main code and dataset (using neural network) : https://github.com/Shivan118/Chronic-Kidney-Disease-Project (https://www.youtube.com/watch?v=6Okg6dDIuLI)
+
+about csv dataset and cleaning : https://github.com/matthew-brett/datasets/blob/1ac6d8cce354c35ff26664a84f57b1145bfb74d7/ckd/original/README.md
+
+yt video on how to train on multiple models : https://www.youtube.com/watch?v=i_FoO-HH518&pp=ygU4Y2hyb25pYyBraWRuZXkgZGlzZWFzZSBkZXRlY3Rpb24gdXNpbmcgbWFjaGluZSBsZWFybmluZyA%3D

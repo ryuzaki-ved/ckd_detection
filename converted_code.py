@@ -286,21 +286,16 @@ shap_values = explainer.shap_values(x_test[:100])  # Limiting to 100 for speed
 # Plot summary of feature impact
 shap.summary_plot(shap_values, x_test[:100], feature_names=X_ros.columns)
 
-# Ensure the shapes align by checking the number of features
-print(f"Shape of shap_values: {shap_values[0].shape}")
-print(f"Shape of x_test[0]: {x_test[0].shape}")
-print(f"Number of features in X_ros: {len(X_ros.columns)}")
-print(f"Number of features in x_test: {x_test.shape[1]}")
-
 # Visualize a single prediction’s feature contributions
-shap.force_plot(explainer.expected_value, shap_values[0].reshape(1, -1), x_test[0].reshape(1, -1), feature_names=X_ros.columns)
+# Here we take the first test instance as an example
+shap.force_plot(explainer.expected_value, shap_values[0], x_test[0], feature_names=X_ros.columns)
 
 def explain_prediction(model, explainer, sample_index):
     prediction = model.predict(x_test[sample_index].reshape(1, -1))[0]
     print("Prediction for sample index", sample_index, ":", "CKD" if prediction > 0.5 else "No CKD")
     
-    # Reshape both shap_values and x_test for a single prediction
-    shap.force_plot(explainer.expected_value, shap_values[sample_index].reshape(1, -1), x_test[sample_index].reshape(1, -1), 
+    # Display SHAP plot for individual prediction
+    shap.force_plot(explainer.expected_value, shap_values[sample_index], x_test[sample_index], 
                     feature_names=X_ros.columns, matplotlib=True)
     
 # Example usage

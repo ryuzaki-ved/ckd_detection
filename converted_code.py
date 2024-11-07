@@ -251,8 +251,57 @@ print('Recall: ' + str(recall[idx]))
 print('Threshold: ' + str(thresholds[idx]))
 print('F1 Score: ' + str(f1score[idx]))
 
+# to be added more and tested
 
+# Confusion Matrix and Classification Report
+y_pred = (model.predict(x_test, verbose=True) > threshold).astype("int32")
 
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 5))
+sns.heatmap(cm, annot=True, fmt="d")
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
 
+print(classification_report(y_test, y_pred))
+print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print(f"F1 Score: {f1_score(y_test, y_pred)}")
 
+# Overall evaluation
+print(f"Final accuracy score: {accuracy_score(y_test, y_pred):.2f}")
+print(f"Final F1 score: {f1_score(y_test, y_pred):.2f}")
 
+# Export model
+model.save('kidney_disease_model.h5')
+
+import shap
+
+# Create a SHAP explainer using the trained model
+explainer = shap.KernelExplainer(model.predict, x_train)
+
+# Choose a subset of the test data to explain
+shap_values = explainer.shap_values(x_test[:100])  # Limiting to 100 for speed
+
+# Plot summary of feature impact
+shap.summary_plot(shap_values, x_test[:100], feature_names=X_ros.columns)
+
+# Ensure the shapes align by checking the number of features
+print(f"Shape of shap_values: {shap_values[0].shape}")
+print(f"Shape of x_test[0]: {x_test[0].shape}")
+print(f"Number of features in X_ros: {len(X_ros.columns)}")
+print(f"Number of features in x_test: {x_test.shape[1]}")
+
+# Visualize a single prediction’s feature contributions
+shap.force_plot(explainer.expected_value, shap_values[0].reshape(1, -1), x_test[0].reshape(1, -1), feature_names=X_ros.columns)
+
+def explain_prediction(model, explainer, sample_index):
+    prediction = model.predict(x_test[sample_index].reshape(1, -1))[0]
+    print("Prediction for sample index", sample_index, ":", "CKD" if prediction > 0.5 else "No CKD")
+    
+    # Reshape both shap_values and x_test for a single prediction
+    shap.force_plot(explainer.expected_value, shap_values[sample_index].reshape(1, -1), x_test[sample_index].reshape(1, -1), 
+                    feature_names=X_ros.columns, matplotlib=True)
+    
+# Example usage
+explain_prediction(model, explainer, sample_index=5)  # Display prediction and reasoning for sample 5

@@ -67,7 +67,6 @@ df_imputer['classification'].value_counts()
 temp = df_imputer['classification'].value_counts()
 temp_df = pd.DataFrame({'classification': temp.index, 'values':temp.values})
 print(sns.barplot(x = 'classification', y = 'values', data =temp_df ))
-# Implanced data
 
 df.dtypes
 
@@ -186,9 +185,9 @@ history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=2
 
 x_train.shape[1]
 
-x_train.shape[1] * 15  # Dense X * weight
+x_train.shape[1] * 15
 
-(x_train.shape[1] + 1) * 15  # X * w + bias
+(x_train.shape[1] + 1) * 15
 
 
 # function to plot the roc_curve
@@ -251,9 +250,6 @@ print('Recall: ' + str(recall[idx]))
 print('Threshold: ' + str(thresholds[idx]))
 print('F1 Score: ' + str(f1score[idx]))
 
-# to be added more and tested
-
-# Confusion Matrix and Classification Report
 y_pred = (model.predict(x_test, verbose=True) > threshold).astype("int32")
 
 cm = confusion_matrix(y_test, y_pred)
@@ -268,26 +264,19 @@ print(classification_report(y_test, y_pred))
 print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
 print(f"F1 Score: {f1_score(y_test, y_pred)}")
 
-# Overall evaluation
 print(f"Final accuracy score: {accuracy_score(y_test, y_pred):.2f}")
 print(f"Final F1 score: {f1_score(y_test, y_pred):.2f}")
 
-# Export model
 model.save('kidney_disease_model.h5')
 
 import shap
 
-# Create a SHAP explainer using the trained model
 explainer = shap.KernelExplainer(model.predict, x_train)
 
-# Choose a subset of the test data to explain
 shap_values = explainer.shap_values(x_test[:100])  # Limiting to 100 for speed
 
-# Plot summary of feature impact
 shap.summary_plot(shap_values, x_test[:100], feature_names=X_ros.columns)
 
-# Visualize a single prediction’s feature contributions
-# Here we take the first test instance as an example
 shap.force_plot(explainer.expected_value, shap_values[0], x_test[0], feature_names=X_ros.columns)
 
 def explain_prediction(model, explainer, sample_index):
@@ -299,4 +288,4 @@ def explain_prediction(model, explainer, sample_index):
                     feature_names=X_ros.columns, matplotlib=True)
     
 # Example usage
-explain_prediction(model, explainer, sample_index=5)  # Display prediction and reasoning for sample 5
+explain_prediction(model, explainer, sample_index=5)

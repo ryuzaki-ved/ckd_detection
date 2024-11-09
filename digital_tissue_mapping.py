@@ -66,5 +66,5 @@ def process_image_folder(folder_path, baseline_area=None):
   
 # Example usage
 baseline_area = 5000  # Set a baseline area for comparison
-folder_path = "/path/to/tissue/images"  # Folder containing tissue images
+folder_path = "path"  # Folder containing tissue images
 process_image_folder(folder_path, baseline_area)

@@ -60,7 +60,7 @@ pip (Python package manager)
 ### Installation
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/ryuzaki-ved/ckd_detection
 cd chronic-kidney-disease-prediction
 
 # Install required packages
